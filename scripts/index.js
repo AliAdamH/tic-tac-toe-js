@@ -63,12 +63,44 @@ const Player = (sign) => {
     return { sign };
 }
 
-const game = (() => {
+const game = ((playerOne, playerTwo) => {
+
+    let currentPlayer = playerOne;
+    let waitingPlayer = playerTwo;
+
     const switchPlayers = () => {
-        [ currentPlayer, waitingPlayer ]= [ waitingPlayer, currentPlayer ];
+        [ currentPlayer, waitingPlayer ] = [ waitingPlayer, currentPlayer ];
     };
 
-    const play = () => {
+
+    const gameOver = function(status) {
+            //does things if it's a draw
+            //does other things if it's a win.
+    }
+
+    const updateGameStatus = () => {
+        const winnerExists = gameBoard.anyWinner();
+        const gameIsDraw = gameBoard.isItDraw();
+        if (winnerExists) {
+            gameOver({status: 1});
+        } else if (gameIsDraw) {
+            gameOver({status: 2});
+        } else {
+            switchPlayers();
+        }
 
     }
+
+
+    const markCell = function(e) {
+        let { x, y } = e.target.dataset;
+        gameBoard.setCell(x, y, currentPlayer.sign );
+        updateGameStatus();
+    }
+
+    const play = () => {
+        const buttons = document.querySelectorAll('button');
+        buttons.addEventListener('click', markCell, { once: true })
+    }
+
 })(playerOne, playerTwo);
