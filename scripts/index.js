@@ -4,8 +4,8 @@ const boardHelper = (() => {
         return matrix.flat().every((cell) => cell !== '' );
     }
 
-    const allEmpty = function(matrix) {
-        return matrix.flat().every((cell) =>cell === '' );
+    const allEmpty = function(row) {
+        return row.every((cell) => cell === '' );
     }
 
     const allSame = (row) => {
@@ -39,7 +39,7 @@ const gameBoard = (() => {
     const getCell = (x,y) => cells[x][y];
 
 
-
+    // Columns == Transpose the grid.
     const columns = cells[0].map((cell, index) => cells.map((cell) => cell[index]));
     const primaryDiagonal = [cells[0][0], cells[1][1], cells[2][2] ]
     const secondaryDiagonal = [cells[0][2], cells[1][1], cells[2][0]]
@@ -49,9 +49,24 @@ const gameBoard = (() => {
                                     .concat(primaryDiagonal)
                                     .concat(secondaryDiagonal)
 
+
+    
+    const anyWinner = () => {
+        for(const row of winningCombinations) {
+            if(boardHelper.allEmpty(row)) continue;
+            if(boardHelper.allSame(row)) return true;
+        }
+        return false
+    }
+
+    // All the cells have a sign.
+    const isItDraw = () => boardHelper.noneEmpty(cells);
+
     return {
         setCell,
-        getCell
+        getCell,
+        anyWinner,
+        isItDraw
     };
 
 })();
