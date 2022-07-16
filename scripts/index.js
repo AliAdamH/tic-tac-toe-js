@@ -40,19 +40,18 @@ const gameBoard = (() => {
 
 
     // Columns == Transpose the grid.
-    const columns = cells[0].map((cell, index) => cells.map((cell) => cell[index]));
-    const primaryDiagonal = [cells[0][0], cells[1][1], cells[2][2] ]
-    const secondaryDiagonal = [cells[0][2], cells[1][1], cells[2][0]]
+    const columns = () => cells[0].map((cell, index) => cells.map((cell) => cell[index]));
+    const primaryDiagonal = () => [[cells[0][0], cells[1][1], cells[2][2] ]];
+    const secondaryDiagonal =  () => [[cells[0][2], cells[1][1], cells[2][0]]];
 
-    const winningCombinations = cells
-                                    .concat(columns)
-                                    .concat(primaryDiagonal)
-                                    .concat(secondaryDiagonal)
-
-
+    const winningCombinations = function() { 
+        return cells.concat(columns())
+                    .concat(primaryDiagonal())
+                    .concat(secondaryDiagonal());
+    }
     
     const anyWinner = () => {
-        for(const row of winningCombinations) {
+        for(const row of winningCombinations()) {
             if(boardHelper.allEmpty(row)) continue;
             if(boardHelper.allSame(row)) return true;
         }
@@ -77,9 +76,17 @@ const gameBoard = (() => {
 const Player = (sign) => {
     return { sign };
 }
+let playerOne = Player('X');
+let playerTwo = Player('O');
+
 
 const game = ((playerOne, playerTwo) => {
-
+    /* TODO:
+        1. Highlight function to give some cue on who is the current player.
+        2. Factor out the buttons node list.
+        3. Add a function to remove all the event listeners on buttons for a game reset || game restart.
+        4. Add a gameOverMessage function to render the message on the DOM.
+    */
     let currentPlayer = playerOne;
     let waitingPlayer = playerTwo;
 
@@ -88,14 +95,22 @@ const game = ((playerOne, playerTwo) => {
     };
 
 
-    const gameOver = function(status) {
-            //does things if it's a draw
-            //does other things if it's a win.
+    const gameOver = function({status}) {
+        let message;
+        if (status === 1) {
+            message = `It's a win for ${currentPlayer.sign}`
+        } else {
+            message = "Boo it's a draw";
+        }
+
+        document.querySelectorAll('button').forEach((element) => element.removeEventListener('click', markCell, {once: true}));
+        console.log(message);
     }
 
     const updateGameStatus = () => {
         const winnerExists = gameBoard.anyWinner();
         const gameIsDraw = gameBoard.isItDraw();
+        console.log(winnerExists);
         if (winnerExists) {
             gameOver({status: 1});
         } else if (gameIsDraw) {
@@ -110,12 +125,19 @@ const game = ((playerOne, playerTwo) => {
     const markCell = function(e) {
         let { x, y } = e.target.dataset;
         gameBoard.setCell(x, y, currentPlayer.sign );
+        e.target.innerHTML = `${currentPlayer.sign}`;
         updateGameStatus();
     }
 
     const play = () => {
         const buttons = document.querySelectorAll('button');
-        buttons.addEventListener('click', markCell, { once: true })
+        buttons.forEach((button) =>  { 
+            button.addEventListener('click', markCell, { once: true })
+        })
     }
 
+    return { play }
 })(playerOne, playerTwo);
+
+
+game.play();
