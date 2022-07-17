@@ -86,12 +86,7 @@ let playerTwo = Player('O');
 
 
 const game = ((playerOne, playerTwo) => {
-    /* TODO:
-        1. Highlight function to give some cue on who is the current player.
-        2. Factor out the buttons node list.
-        3. Add a function to remove all the event listeners on buttons for a game reset || game restart.
-        4. Add a gameOverMessage function to render the message on the DOM.
-    */
+
     const buttons = document.querySelectorAll('.cell');
     let currentPlayer = playerOne;
     let waitingPlayer = playerTwo;
@@ -124,6 +119,7 @@ const game = ((playerOne, playerTwo) => {
 
     const switchPlayers = () => {
         [ currentPlayer, waitingPlayer ] = [ waitingPlayer, currentPlayer ];
+        displayHelper.hightLightPlayer(currentPlayer);
     };
 
 
@@ -166,6 +162,9 @@ const game = ((playerOne, playerTwo) => {
 
 const displayHelper = (() => {
 
+    const playerX = document.querySelector('.x-player')
+    const playerO = document.querySelector('.o-player')
+
     const gameOverMessage = ({status, sign}) => {
         let message;
         if (status === 1) {
@@ -173,7 +172,11 @@ const displayHelper = (() => {
         } else {
             message = "Boo it's a draw";
         }
+        displayMessage(message);
         console.log(message);
+    }
+    
+    const displayMessage = (message) => {
         let messageContainer = document.createElement('div');
         messageContainer.className = 'flash';
         messageContainer.innerText = message;
@@ -182,10 +185,16 @@ const displayHelper = (() => {
     }
 
     const hightLightPlayer = (player) => {
-
+        if (player.sign === 'X') {
+            playerO.classList.remove('highlight', 'highlight--green')
+            playerX.classList.add('highlight','highlight--red');
+        } else {
+            playerO.classList.add('highlight', 'highlight--green');
+            playerX.classList.remove('highlight','highlight--red');
+        }
     }
 
-    return { gameOverMessage }
+    return { gameOverMessage, hightLightPlayer }
 
 })();
 

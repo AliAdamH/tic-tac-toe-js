@@ -78,3 +78,15 @@ button {
     position: fixed;
     text-align: center;
 }
+
+.highlight {
+    border-bottom: 4px solid;
+}
+
+.highlight--red {
+    border-bottom-color: red;
+}
+
+.highlight--green {
+    border-bottom-color: lawngreen;
+}
