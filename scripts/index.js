@@ -181,7 +181,10 @@ const displayHelper = (() => {
         messageContainer.className = 'flash';
         messageContainer.innerText = message;
         document.body.appendChild(messageContainer);
-        // Add a set time out function to remove the message after 1.5s
+        
+        setTimeout(() => {
+            messageContainer.remove();
+        }, 1500);
     }
 
     const hightLightPlayer = (player) => {
