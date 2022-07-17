@@ -128,14 +128,8 @@ const game = ((playerOne, playerTwo) => {
 
 
     const gameOver = function({status}) {
-        let message;
-        if (status === 1) {
-            message = `It's a win for ${currentPlayer.sign}`
-        } else {
-            message = "Boo it's a draw";
-        }
         disableButtons();
-        console.log(message);
+        displayHelper.gameOverMessage({status, sign: currentPlayer.sign })
     }
 
     const updateGameStatus = () => {
@@ -168,6 +162,32 @@ const game = ((playerOne, playerTwo) => {
 
     return { play, restart }
 })(playerOne, playerTwo);
+
+
+const displayHelper = (() => {
+
+    const gameOverMessage = ({status, sign}) => {
+        let message;
+        if (status === 1) {
+            message = `It's a win for ${sign}`
+        } else {
+            message = "Boo it's a draw";
+        }
+        console.log(message);
+        let messageContainer = document.createElement('div');
+        messageContainer.className = 'flash';
+        messageContainer.innerText = message;
+        document.body.appendChild(messageContainer);
+        // Add a set time out function to remove the message after 1.5s
+    }
+
+    const hightLightPlayer = (player) => {
+
+    }
+
+    return { gameOverMessage }
+
+})();
 
 
 game.play();
