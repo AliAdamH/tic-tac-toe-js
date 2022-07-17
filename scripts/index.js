@@ -32,6 +32,10 @@ const gameBoard = (() => {
     ];
 
 
+    const clear = () => {
+        cells.map((row) => { row.map((_value,index) => row[index] = '' ) });
+    }
+
     const setCell = (x,y, value) => {
         cells[x][y] = value;
     }
@@ -65,7 +69,8 @@ const gameBoard = (() => {
         setCell,
         getCell,
         anyWinner,
-        isItDraw
+        isItDraw,
+        clear
     };
 
 })();
@@ -87,10 +92,24 @@ const game = ((playerOne, playerTwo) => {
         3. Add a function to remove all the event listeners on buttons for a game reset || game restart.
         4. Add a gameOverMessage function to render the message on the DOM.
     */
-    const buttons = document.querySelectorAll('button');
+    const buttons = document.querySelectorAll('.cell');
     let currentPlayer = playerOne;
     let waitingPlayer = playerTwo;
 
+
+    const reset = () => {
+        // 1. Remove all the button event listeners.
+        disableButtons();
+        clearButtons();
+        // 2. Ask the gameBoard to clear its cells.
+        gameBoard.clear();
+    }
+
+    const clearButtons = () => {
+        buttons.forEach((button) => {
+            button.innerHTML = '';
+        })
+    }
 
     const disableButtons = () => {
         buttons.forEach((button) => {
@@ -142,8 +161,9 @@ const game = ((playerOne, playerTwo) => {
         })
     }
 
-    return { play }
+    return { play, reset }
 })(playerOne, playerTwo);
 
 
 game.play();
+document.querySelector('.reset').addEventListener('click', game.reset);
