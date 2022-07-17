@@ -87,8 +87,16 @@ const game = ((playerOne, playerTwo) => {
         3. Add a function to remove all the event listeners on buttons for a game reset || game restart.
         4. Add a gameOverMessage function to render the message on the DOM.
     */
+    const buttons = document.querySelectorAll('button');
     let currentPlayer = playerOne;
     let waitingPlayer = playerTwo;
+
+
+    const disableButtons = () => {
+        buttons.forEach((button) => {
+            button.removeEventListener('click', markCell, { once: true })
+        })
+    }
 
     const switchPlayers = () => {
         [ currentPlayer, waitingPlayer ] = [ waitingPlayer, currentPlayer ];
@@ -102,8 +110,7 @@ const game = ((playerOne, playerTwo) => {
         } else {
             message = "Boo it's a draw";
         }
-
-        document.querySelectorAll('button').forEach((element) => element.removeEventListener('click', markCell, {once: true}));
+        disableButtons();
         console.log(message);
     }
 
@@ -130,7 +137,6 @@ const game = ((playerOne, playerTwo) => {
     }
 
     const play = () => {
-        const buttons = document.querySelectorAll('button');
         buttons.forEach((button) =>  { 
             button.addEventListener('click', markCell, { once: true })
         })
