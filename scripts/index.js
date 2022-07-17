@@ -105,6 +105,11 @@ const game = ((playerOne, playerTwo) => {
         gameBoard.clear();
     }
 
+    const restart = () => {
+        reset();
+        play();
+    }
+
     const clearButtons = () => {
         buttons.forEach((button) => {
             button.innerHTML = '';
@@ -161,9 +166,9 @@ const game = ((playerOne, playerTwo) => {
         })
     }
 
-    return { play, reset }
+    return { play, restart }
 })(playerOne, playerTwo);
 
 
 game.play();
-document.querySelector('.reset').addEventListener('click', game.reset);
+document.querySelector('.restart').addEventListener('click', game.restart);
