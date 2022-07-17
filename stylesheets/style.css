@@ -53,6 +53,15 @@ button {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 1rem;
+}
+
+.players--list div {
+    font-size: 1.5rem;
+}
+
+p {
+    padding: 1rem;
 }
 
 .cell {
@@ -80,7 +89,7 @@ button {
 }
 
 .highlight {
-    border-bottom: 4px solid;
+    border-bottom: 4px solid transparent;
 }
 
 .highlight--red {
